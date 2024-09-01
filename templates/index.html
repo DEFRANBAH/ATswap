@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Swap Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>SIM Swap Checker</h1>
+        <form id="sim-swap-form">
+            <label for="phone_number">Enter Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number" required>
+            <button type="submit">Check SIM Swap Status</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('sim-swap-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phoneNumber = document.getElementById('phone_number').value;
+            
+            fetch('/check_sim_swap', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `phone_number=${phoneNumber}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.message;
+            })
+            .catch(error => {
+                document.getElementById('result').innerText = 'Error checking SIM swap status.';
+            });
+        });
+    </script>
+</body>
+</html>
+
